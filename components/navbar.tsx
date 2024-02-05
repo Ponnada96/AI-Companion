@@ -7,7 +7,7 @@ import { ModeToggle } from "./mode-toggler";
 const NavBar = () => {
     return (
     <div className="w-full z-50 flex justify-between items-center 
-                    fixed bg-secondary border-b border-primary/10 px-4 py-2">
+                    fixed bg-secondary border-b border-primary/10 px-4 py-2 h-16">
        <div className="flex items-center">
                 <Menu className="block md:hidden" />
                 <Link href={"/"}>
