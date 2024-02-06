@@ -1,12 +1,15 @@
-import { UserButton } from "@clerk/nextjs";
+import Categories from "@/components/categories";
+import { SearchInput } from "@/components/search-input";
+import prisma from "@/prisma/primsadb";
 
-const RootPage = () => {
+const RootPage = async () => {
+    const categoires = await prisma.category.findMany();
     return (
-        <div>
-            <UserButton afterSignOutUrl="/" />
+        <div className="h-full p-4 space-y-2">
+            <SearchInput />
+            <Categories data={categoires} />
         </div>
     );
-
 }
 
 export default RootPage;
