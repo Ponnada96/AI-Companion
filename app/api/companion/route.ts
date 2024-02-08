@@ -18,7 +18,6 @@ export async function POST(req: Request) {
         }
 
         //TODO: check for subsciptions
-
         const companion = await prismadb.companion.create({
             data:{
                 userId: user.id,
