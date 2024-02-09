@@ -1,10 +1,22 @@
 'use client'
 
-import { ChevronLeft, MessageSquare } from "lucide-react";
+import axios from "axios";
+import { ChevronLeft, Edit, MessageSquare, MoreVertical, Trash } from "lucide-react";
 import { Companion, Message } from "@prisma/client";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 import { BotAvatar } from "./bot-avatar";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { useUser } from "@clerk/nextjs";
+import { useToast } from "./ui/use-toast";
+
 
 interface ChatHeaderProps {
     companion: Companion & {
@@ -17,6 +29,26 @@ interface ChatHeaderProps {
 
 const ChatHeader = ({ companion }: ChatHeaderProps) => {
     const router = useRouter()
+    const { user } = useUser()
+    const { toast } = useToast()
+
+    const onDelete = async () => {
+        try {
+            await axios.delete(`/api/companion/${companion.id}`);
+            toast({
+                description:'Success.'
+            })
+            router.refresh();
+            router.push('/')
+        }
+        catch (error) {
+            toast({
+                description: "Something went wrong.",
+                variant: 'destructive'
+            })
+        }
+    }
+
     return (
         <div className="w-full flex justify-between items-center border-b border-primary/10 p-4">
             <div className="flex gap-x-2 items-center">
@@ -42,6 +74,29 @@ const ChatHeader = ({ companion }: ChatHeaderProps) => {
                     </p>
                 </div>
             </div>
+            {user?.id === companion.userId && (
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button size={"icon"} variant="ghost">
+                            <MoreVertical />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuItem
+                            className="cursor-pointer"
+                            onClick={() => router.push(`/companion/${companion.id}`)}>
+                            <Edit className="w-4 h-4 mr-2" />
+                            Edit
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                            className="cursor-pointer"
+                            onClick={() => onDelete()}>
+                            <Trash className="w-4 h-4 mr-2" />
+                            Delete
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            )}
         </div>
     )
 }
