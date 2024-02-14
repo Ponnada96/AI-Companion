@@ -41,7 +41,7 @@ export const ChatMessage = ({
             role === "user" && "justify-end"
         )}>
 
-            {role !== 'user' && <BotAvatar src={src} />}
+            {role !== 'user' && <BotAvatar src={src!} />}
             <div className="bg-primary/10 px-4 py-2 rounded-md max-w-sm text-sm">
                 {isLoading
                     ? <BeatLoader

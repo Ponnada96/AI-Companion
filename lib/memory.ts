@@ -20,14 +20,6 @@ export class MemoryManager {
         this.vectorDBClient = new Pinecone({ apiKey: process.env.PINECONE_API_KEY! })
     }
 
-    // public async init() {
-    //     if (this.vectorDBClient instanceof Pinecone) {
-    //         await this.vectorDBClient.init({
-
-    //         })
-    //     }
-    // }
-
     public async vectorSearch(
         recentChatHistory: string,
         companionFileName: string
