@@ -26,8 +26,8 @@ export const ChatMessages = ({ messages, isLoading, companion }: ChatMessagesPro
 
     useEffect(() => {
         scrollRef?.current?.scrollIntoView({ behavior: 'smooth' })
-    }, [messages])
-
+    }, [messages.length])
+ 
     return (
         <div className="flex-1 overflow-y-auto pr-4">
             <ChatMessage
