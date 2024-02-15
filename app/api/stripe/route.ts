@@ -1,5 +1,5 @@
 import { absoluteUrl } from "@/lib/utils";
-import { currentUser, useAuth } from "@clerk/nextjs"
+import { auth, currentUser, useAuth } from "@clerk/nextjs"
 import { NextResponse } from "next/server"
 import prismadb from '@/prisma/primsadb'
 import { stripe } from "@/lib/stripe";
@@ -8,8 +8,9 @@ const settingUrl = absoluteUrl("/settings");
 
 export async function GET() {
     try {
-        const { userId } = useAuth();
+        const { userId } = auth();
         const user = await currentUser();
+        
         if (!userId || !user) {
             return new NextResponse("Unauthorized", { status: 401 })
         }
@@ -33,7 +34,7 @@ export async function GET() {
             success_url: settingUrl,
             cancel_url: settingUrl,
             payment_method_types: ["card"],
-            mode: 'subscription',
+            mode: 'subscription', 
             billing_address_collection: 'auto',
             customer_email: user.emailAddresses[0].emailAddress,
             line_items: [
