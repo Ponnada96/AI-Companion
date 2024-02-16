@@ -6,16 +6,18 @@ import {
 } from "@/components/ui/sheet"
 import SideBar from "./side-bar"
 
+interface MobilNavProps {
+    isPro: boolean
+}
 
-
-export const MobileNav = () => {
+export const MobileNav = ({ isPro }: MobilNavProps) => {
     return (
         <Sheet>
             <SheetTrigger className="md:hidden pr-4">
                 <Menu />
             </SheetTrigger>
             <SheetContent side={'left'} className="w-32 p-0 pt-10 bg-secondary">
-                <SideBar />
+                <SideBar isPro={isPro} />
             </SheetContent>
         </Sheet>
     )

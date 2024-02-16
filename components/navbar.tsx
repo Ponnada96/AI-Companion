@@ -20,7 +20,7 @@ const NavBar = ({ isPro }: NavBarProps) => {
         <div className="w-full z-50 flex justify-between items-center 
                     fixed bg-secondary border-b border-primary/10 px-4 py-2 h-16">
             <div className="flex items-center">
-                <MobileNav />
+                <MobileNav isPro={isPro}/>
                 <Link href={"/"}>
                     <h1 className="hidden md:block text-xl md:text-3xl font-bold text-primary">
                         companion.ai
