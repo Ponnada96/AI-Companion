@@ -8,8 +8,13 @@ import { ModeToggle } from "./mode-toggler";
 import { MobileNav } from "./mobile-nav";
 import { useProModal } from "@/hooks/use-pro-modal";
 
-const NavBar = () => {
-    const promodal = useProModal()
+interface NavBarProps {
+    isPro: boolean
+}
+
+const NavBar = ({ isPro }: NavBarProps) => {
+
+    const promodal = useProModal();
 
     return (
         <div className="w-full z-50 flex justify-between items-center 
@@ -24,13 +29,15 @@ const NavBar = () => {
 
             </div>
             <div className="flex gap-x-3 items-center">
-                <Button variant={'premiun'}
-                    size={"sm"}
-                    onClick={promodal.onOpen}
-                >
-                    Subscribe
-                    <Sparkles className="h-4 w-4 fill-white ml-2 text-white" />
-                </Button>
+                {!isPro && (
+                    <Button variant={'premiun'}
+                        size={"sm"}
+                        onClick={promodal.onOpen}
+                    >
+                        Subscribe
+                        <Sparkles className="h-4 w-4 fill-white ml-2 text-white" />
+                    </Button>
+                )}
                 <ModeToggle />
                 <UserButton afterSignOutUrl="/" />
             </div>
