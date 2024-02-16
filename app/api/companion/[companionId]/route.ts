@@ -1,6 +1,6 @@
 import { auth, currentUser } from '@clerk/nextjs';
 import { NextResponse } from 'next/server';
-import prismadb from '@/prisma/primsadb';
+import prismadb from '@/lib/primsadb';
 import { checkSubscription } from '@/lib/subscription';
 
 interface requestParams {

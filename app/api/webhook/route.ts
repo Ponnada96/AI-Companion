@@ -1,5 +1,5 @@
 import { stripe } from "@/lib/stripe";
-import prismadb from "@/prisma/primsadb";
+import prismadb from "@/lib/primsadb";
 import { headers } from "next/headers"
 import { NextResponse } from "next/server";
 import Stripe from "stripe"

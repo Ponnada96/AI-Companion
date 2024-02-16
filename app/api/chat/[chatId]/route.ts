@@ -1,7 +1,7 @@
 import { rateLimit } from "@/lib/rate-limit";
 import { currentUser } from "@clerk/nextjs";
 import { NextResponse } from "next/server"
-import prismadb from '@/prisma/primsadb';
+import prismadb from '@/lib/primsadb';
 import { MemoryManager } from "@/lib/memory";
 import { LangChainStream, StreamingTextResponse } from "ai";
 import { Replicate } from "langchain/llms/replicate";

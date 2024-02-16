@@ -1,4 +1,4 @@
-import prismadb from "@/prisma/primsadb"
+import prismadb from "@/lib/primsadb"
 import { CompanionForm } from "./components/companion-form"
 import { auth, redirectToSignIn } from "@clerk/nextjs"
 
