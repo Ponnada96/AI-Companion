@@ -34,7 +34,7 @@ const NavBar = ({ isPro }: NavBarProps) => {
                         size={"sm"}
                         onClick={promodal.onOpen}
                     >
-                        Subscribe
+                        Upgrade
                         <Sparkles className="h-4 w-4 fill-white ml-2 text-white" />
                     </Button>
                 )}
