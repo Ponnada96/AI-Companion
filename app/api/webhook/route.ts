@@ -12,7 +12,6 @@ export async function POST(req: Request) {
     let event: Stripe.Event;
 
     try {
-
         event = stripe.webhooks.constructEvent(
             body,
             signature,
@@ -62,4 +61,5 @@ export async function POST(req: Request) {
             }
          })
     }
+    return new NextResponse(null, { status: 200 })
 }
