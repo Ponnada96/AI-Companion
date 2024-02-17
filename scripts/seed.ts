@@ -1,6 +1,5 @@
 const { PrismaClient } = require("@prisma/client")
 
-import { futimes } from "fs";
 
 const db = new PrismaClient();
 
