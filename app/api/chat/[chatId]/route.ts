@@ -59,10 +59,11 @@ export async function POST(request: Request,
         const records = await memoryManager.readLatestHistory(companionKey);
 
         if (records.length === 0) {
-            await memoryManager.seedChatHistor(companion.seed, "\n\n", companionKey)
+            await memoryManager.seedChatHistory(companion.seed, "\n\n", companionKey)
         }
         await memoryManager.writeToHistory("User: " + prompt + "\n", companionKey)
 
+        // Query Pinecone
         const recentChatHistory = await memoryManager.readLatestHistory(companionKey)
 
         const similarDocs = await memoryManager.vectorSearch(recentChatHistory, companion_file_name)
@@ -74,6 +75,8 @@ export async function POST(request: Request,
         }
 
         const { handlers } = LangChainStream();
+
+        // Call Replicate for inference
         const model = new Replicate({
             model:
                 "a16z-infra/llama-2-13b-chat:df7690f1994d94e96ad9d568eac121aecf50684a0b0963b25a41cc40061269e5",
@@ -84,27 +87,29 @@ export async function POST(request: Request,
             callbackManager: CallbackManager.fromHandlers(handlers),
         });
 
+        // Turn verbose on for debugging
         model.verbose = true;
 
         const resp = String(
-            await model.invoke(
-                `
-                 ONLY generate plain sentences without prefix of who is speaking. DO NOT use ${companion.name}: prefix. 
+            await model
+                .call(
+                    `
+                  ONLY generate plain sentences without prefix of who is speaking. DO NOT use ${companion.name}: prefix. 
 
-                ${companion.instructions}
+                 ${companion.instructions}
 
-                Below are relevant details about ${companion.name}'s past and the conversation you are in.
-                ${relevantHistory}
+                  Below are relevant details about ${companion.name}'s past and the conversation you are in.
+                  ${relevantHistory}
 
 
-                ${recentChatHistory}\n${companion.name}:
-                `
-            ).catch(console.error)
-        )
+                  ${recentChatHistory}\n${companion.name}:`
+                )
+                .catch(console.error)
+        );
 
         const cleaned = resp.replaceAll(",", "");
-        const chunks = cleaned.split('\n')
-        const response = chunks[0]
+        const chunks = cleaned.split("\n");
+        const response = chunks[0];
 
         await memoryManager.writeToHistory("" + response.trim(), companionKey);
         var Readable = require('stream').Readable;
