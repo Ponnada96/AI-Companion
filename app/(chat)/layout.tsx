@@ -1,4 +1,3 @@
-import React from "react";
 
 const ChatLayout = ({ children }: { children: React.ReactNode }) => {
     return (

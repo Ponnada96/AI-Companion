@@ -1,7 +1,6 @@
 import NavBar from "@/components/navbar";
 import SideBar from "@/components/side-bar";
 import { checkSubscription } from "@/lib/subscription";
-import React from "react";
 
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
 

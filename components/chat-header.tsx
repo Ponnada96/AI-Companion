@@ -3,15 +3,13 @@
 import axios from "axios";
 import { ChevronLeft, Edit, MessageSquare, MoreVertical, Trash } from "lucide-react";
 import { Companion, Message } from "@prisma/client";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { BotAvatar } from "./bot-avatar";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useUser } from "@clerk/nextjs";

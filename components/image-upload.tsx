@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from "react"
-import { CldUploadButton, CldUploadWidgetResults } from 'next-cloudinary'
+import { CldUploadButton } from 'next-cloudinary'
 import Image from "next/image"
 interface ImageUploadProps {
     value: string,
