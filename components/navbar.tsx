@@ -1,6 +1,6 @@
 'use client'
 
-import { UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, UserButton, useAuth } from "@clerk/nextjs";
 import { Sparkles } from "lucide-react";
 import Link from "next/link";
 import { Button } from "./ui/button";
@@ -16,6 +16,7 @@ interface NavBarProps {
 const NavBar = ({ isPro }: NavBarProps) => {
 
     const promodal = useProModal();
+    const { isSignedIn } = useAuth();
 
     return (
         <div className="w-full z-50 flex justify-between items-center 
@@ -31,7 +32,7 @@ const NavBar = ({ isPro }: NavBarProps) => {
 
             </div>
             <div className="flex gap-x-3 items-center">
-                {!isPro && (
+                {isSignedIn && !isPro && (
                     <Button variant={'premiun'}
                         size={"sm"}
                         onClick={promodal.onOpen}
@@ -41,7 +42,16 @@ const NavBar = ({ isPro }: NavBarProps) => {
                     </Button>
                 )}
                 <ModeToggle />
-                <UserButton afterSignOutUrl="/sign-in" />
+                <SignedIn>
+                    <UserButton afterSignOutUrl="/" />
+                </SignedIn>
+                <SignedOut>
+                    <Button asChild className="rounded-full bg-gradient-to-r from-sky-500  to-cyan-500 text-white border-0" size="sm">
+                        <Link href="/sign-in">
+                            Login
+                        </Link>
+                    </Button>
+                </SignedOut>
             </div>
         </div>);
 }

@@ -1,6 +1,7 @@
 'use client'
 import { useProModal } from "@/hooks/use-pro-modal";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@clerk/nextjs";
 import { Home, Plus, Settings } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -12,9 +13,10 @@ const SideBar = ({ isPro }: SideBarProps) => {
     const pathname = usePathname()
     const router = useRouter()
     const proModal = useProModal()
+    const { isSignedIn } = useAuth()
 
     const navigate = (path: string, isProtected: boolean) => {
-        if (isProtected && !isPro) {
+        if (isSignedIn && isProtected && !isPro) {
             return proModal.onOpen()
         }
         router.push(path)
