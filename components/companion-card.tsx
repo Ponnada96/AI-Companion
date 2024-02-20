@@ -15,7 +15,6 @@ interface CompanionCardProps {
 const CompanionCard = ({ item }: CompanionCardProps) => {
     return (
         <Card
-            key={item.id}
             className="bg-primary/10 rounded-xl 
                         cursor-pointer hover:opacity-75 transition border-0"
         >
