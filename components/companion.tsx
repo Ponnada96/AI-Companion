@@ -49,7 +49,7 @@ const Companion = async ({ searchParams }: CompanionProps) => {
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2 pb-10">
             {
                 data.map((item) => (
-                    <CompanionCard item={item} />
+                    <CompanionCard key={item.id} item={item} />
                 ))
             }
         </div>
