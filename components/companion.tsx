@@ -34,7 +34,7 @@ const Companion = ({ data }: companionProps) => {
         )
     }
     return (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 pb-10">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2 pb-10">
             {
                 data.map((item) => (
                     <Card
@@ -42,7 +42,7 @@ const Companion = ({ data }: companionProps) => {
                         className="bg-primary/10 rounded-xl 
                         cursor-pointer hover:opacity-75 transition border-0"
                     >
-                        <Link href={`/chat/${item.id}`}>
+                        <Link href={`/chat/${item.id}`} className="flex flex-1 h-[300px]  flex-col justify-between">
                             <CardHeader className="flex items-center justify-center 
                                            text-center text-muted-foreground">
                                 <div className="relative w-32 h-32">
@@ -60,7 +60,7 @@ const Companion = ({ data }: companionProps) => {
                                     {item.description}
                                 </p>
                             </CardHeader>
-                            <CardFooter className="flex items-center text-xs
+                            <CardFooter className="flex  items-center text-xs
                               justify-between text-muted-foreground">
                                 <p>@{item.userName}</p>
                                 <div className="flex items-center">
