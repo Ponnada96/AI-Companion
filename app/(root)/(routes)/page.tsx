@@ -1,6 +1,6 @@
 import Categories from "@/components/categories";
 import Companion from "@/components/companion";
-import CompanionSkeleton from "@/components/companions-skeleton";
+import CompanionSkeleton from "@/components/skeleton-ui/companions-skeleton";
 import { SearchInput } from "@/components/search-input";
 import prismadb from "@/lib/primsadb";
 import { Suspense } from "react";
