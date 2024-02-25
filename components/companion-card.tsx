@@ -3,6 +3,7 @@ import { MessageSquare } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { Companion } from "@prisma/client";
+import { auth, redirectToSignIn } from "@clerk/nextjs";
 
 interface CompanionCardProps {
     item: (Companion & {
@@ -13,12 +14,19 @@ interface CompanionCardProps {
 }
 
 const CompanionCard = ({ item }: CompanionCardProps) => {
+
+    const { userId } = auth()
+
+    const isUserLoggedin = () => {
+        return !!userId;
+    }
+
     return (
         <Card
             className="bg-primary/10 rounded-xl 
                         cursor-pointer hover:opacity-75 transition border-0"
         >
-            <Link href={`/chat/${item.id}`} className="flex flex-1 h-[300px]  flex-col justify-between">
+            <Link href={isUserLoggedin() ? ` /chat/${item.id}` : '/sign-in'} className="flex flex-1 h-[300px]  flex-col justify-between">
                 <CardHeader className="flex items-center justify-center 
                                            text-center text-muted-foreground">
                     <div className="relative w-32 h-32">
