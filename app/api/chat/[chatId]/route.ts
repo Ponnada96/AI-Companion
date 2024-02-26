@@ -1,6 +1,6 @@
 import { rateLimit } from "@/lib/rate-limit";
 import { currentUser } from "@clerk/nextjs";
-import { NextResponse } from "next/server"
+import { NextResponse } from "next/server";
 import prismadb from '@/lib/primsadb';
 import { MemoryManager } from "@/lib/memory";
 import { LangChainStream, StreamingTextResponse } from "ai";
@@ -10,20 +10,19 @@ import { CallbackManager } from "langchain/callbacks";
 export async function POST(request: Request,
     { params }: { params: { chatId: string } }
 ) {
-
     try {
         const { prompt } = await request.json();
         const user = await currentUser();
 
         if (!user || !user.firstName || !user.id) {
-            return new NextResponse("Unauthorized", { status: 401 })
+            return new NextResponse("Unauthorized", { status: 401 });
         }
 
-        const identifier = request.url + "-" + user.id;
+        const identifier = `${request.url}-${user.id}`;
         const { success } = await rateLimit(identifier);
 
         if (!success) {
-            return new NextResponse("Rate limit exceeded", { status: 429 })
+            return new NextResponse("Rate limit exceeded", { status: 429 });
         }
 
         const companion = await prismadb.companion.update({
@@ -39,47 +38,46 @@ export async function POST(request: Request,
                     }
                 }
             }
-        })
+        });
 
         if (!companion) {
-            return new NextResponse("Companion not found", { status: 404 })
+            return new NextResponse("Companion not found", { status: 404 });
         }
 
-        const name = companion.id;
-        const companion_file_name = name + '.txt';
+        const companion_file_name = `${companion.id}.txt`;
 
         const companionKey = {
-            companionName: name,
+            companionName: companion.id,
             userId: user.id,
             modelName: 'llama2-13b'
-        }
+        };
 
-        const memoryManager = await MemoryManager.getInstance()
+        const memoryManager = await MemoryManager.getInstance();
 
         const records = await memoryManager.readLatestHistory(companionKey);
 
         if (records.length === 0) {
-            await memoryManager.seedChatHistory(companion.seed, "\n\n", companionKey)
+            await memoryManager.seedChatHistory(companion.seed, "\n\n", companionKey);
         }
-        await memoryManager.writeToHistory("User: " + prompt + "\n", companionKey)
+
+        await memoryManager.writeToHistory(`User: ${prompt}\n`, companionKey);
 
         // Query Pinecone
-        const recentChatHistory = await memoryManager.readLatestHistory(companionKey)
+        const recentChatHistory = await memoryManager.readLatestHistory(companionKey);
 
-        const similarDocs = await memoryManager.vectorSearch(recentChatHistory, companion_file_name)
+        const similarDocs = await memoryManager.vectorSearch(recentChatHistory, companion_file_name);
 
         let relevantHistory = "";
 
-        if (!!similarDocs && similarDocs.length !== 0) {
-            relevantHistory = similarDocs.map((doc) => doc.pageContent).join("\n");
+        if (similarDocs && similarDocs.length !== 0) {
+            relevantHistory = similarDocs.map(doc => doc.pageContent).join("\n");
         }
 
         const { handlers } = LangChainStream();
 
         // Call Replicate for inference
         const model = new Replicate({
-            model:
-                "a16z-infra/llama-2-13b-chat:df7690f1994d94e96ad9d568eac121aecf50684a0b0963b25a41cc40061269e5",
+            model: "a16z-infra/llama-2-13b-chat:df7690f1994d94e96ad9d568eac121aecf50684a0b0963b25a41cc40061269e5",
             input: {
                 max_length: 2048,
             },
@@ -90,10 +88,8 @@ export async function POST(request: Request,
         // Turn verbose on for debugging
         model.verbose = true;
 
-        const resp = String(
-            await model
-                .call(
-                    `
+        const response = await model
+            .call(`
                   ONLY generate plain sentences without prefix of who is speaking. DO NOT use ${companion.name}: prefix. 
 
                  ${companion.instructions}
@@ -103,23 +99,21 @@ export async function POST(request: Request,
 
 
                   ${recentChatHistory}\n${companion.name}:`
-                )
-                .catch(console.error)
-        );
+            )
+            .catch(console.error);
 
-        const cleaned = resp.replaceAll(",", "");
-        const chunks = cleaned.split("\n");
-        const response = chunks[0];
-
-        await memoryManager.writeToHistory("" + response.trim(), companionKey);
+        const cleaned = response?.replaceAll(",", "");
+        const chunks = cleaned?.split("\n");
+        const responseBody = chunks?.[0];
+        await memoryManager.writeToHistory("" + responseBody?.trim(), companionKey);
         var Readable = require('stream').Readable;
 
         let s = new Readable();
         s.push(response);
         s.push(null)
 
-        if (response !== undefined && response.length > 1) {
-            memoryManager.writeToHistory("" + response.trim(), companionKey);
+        if (responseBody && responseBody.length > 1) {
+            await memoryManager.writeToHistory(`${responseBody.trim()}`, companionKey);
 
             await prismadb.companion.update({
                 where: {
@@ -128,20 +122,18 @@ export async function POST(request: Request,
                 data: {
                     messages: {
                         create: {
-                            content: response.trim(),
+                            content: responseBody.trim(),
                             role: 'system',
                             userId: user.id
                         }
                     }
                 }
-            })
+            });
         }
 
-        return new StreamingTextResponse(s);
-
-    }
-    catch (error) {
-        console.log("[CHAT_POST]", error)
-        return new NextResponse("Internal Server", { status: 500 })
+      return  new StreamingTextResponse(s);
+    } catch (error) {
+        console.log("[CHAT_POST]", error);
+        return new NextResponse("Internal Server", { status: 500 });
     }
 }

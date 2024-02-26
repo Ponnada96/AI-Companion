@@ -29,12 +29,13 @@ const CompanionCard = ({ item }: CompanionCardProps) => {
             <Link href={isUserLoggedin() ? ` /chat/${item.id}` : '/sign-in'} className="flex flex-1 h-[300px]  flex-col justify-between">
                 <CardHeader className="flex items-center justify-center 
                                            text-center text-muted-foreground">
-                    <div className="relative w-32 h-32">
+                    <div className="relative w-32 min-h-32">
                         <Image
-                            fill
+                            width={128}
+                            height={128}
                             src={item.src}
                             alt="companion"
-                            className="rounded-xl object-cover"
+                            className="rounded-xl object-cover max-h-32"
                         />
                     </div>
                     <p className="font-bold">
