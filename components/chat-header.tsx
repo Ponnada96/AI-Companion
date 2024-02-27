@@ -53,7 +53,7 @@ const ChatHeader = ({ companion }: ChatHeaderProps) => {
                 <Button
                     size="icon"
                     variant="ghost"
-                    onClick={() => router.back()}>
+                    onClick={() => router.push('/')}>
                     <ChevronLeft className="h-8 w-8" />
                 </Button>
                 <BotAvatar src={companion.src} />
