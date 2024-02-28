@@ -16,7 +16,10 @@ const SideBar = ({ isPro }: SideBarProps) => {
     const { isSignedIn } = useAuth()
 
     const navigate = (path: string, isProtected: boolean) => {
-        if (isSignedIn && isProtected && !isPro) {
+        if (!isSignedIn) {
+           return router.push('/sign-in')
+        }     
+        if (isProtected && !isPro) {
             return proModal.onOpen()
         }
         router.push(path)

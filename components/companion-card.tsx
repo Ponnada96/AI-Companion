@@ -3,7 +3,7 @@ import { MessageSquare } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { Companion } from "@prisma/client";
-import { auth, redirectToSignIn } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs";
 
 interface CompanionCardProps {
     item: (Companion & {
