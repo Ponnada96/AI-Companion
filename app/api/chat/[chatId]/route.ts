@@ -109,7 +109,7 @@ export async function POST(request: Request,
         var Readable = require('stream').Readable;
 
         let s = new Readable();
-        s.push(response);
+        s.push(responseBody);
         s.push(null)
 
         if (responseBody && responseBody.length > 1) {
