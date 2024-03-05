@@ -42,7 +42,7 @@ export const ChatMessage = ({
         )}>
 
             {role !== 'user' && <BotAvatar src={src!} />}
-            <div className="bg-primary/10 px-4 py-2 rounded-md max-w-sm text-sm">
+            <div className="bg-primary/20 px-4 py-2 rounded-md max-w-sm text-sm">
                 {isLoading
                     ? <BeatLoader
                         color={theme === "light" ? "dark" : "white"}
