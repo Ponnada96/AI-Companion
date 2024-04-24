@@ -42,6 +42,7 @@ AI-Companion provides an interactive platform for users to engage with pre-exist
 - TailwindCSS
 - Stripe
 - Zod
+- Prisma
 - React Hook Form
 - Shadcn
 - zustand
